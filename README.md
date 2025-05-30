@@ -1,9 +1,8 @@
 ✈️ FAA Flight Delays & Cancellations Dashboard
 📊 Overview
-In this project, we take on the role of a Data Analyst for the Federal Aviation Administration (FAA).
-We’ve been provided with a dataset of nearly 2 million commercial flights from major U.S. airports, and our objective is to analyze flight delays and cancellations to uncover patterns and insights.
+In this project, I acted as a Data Analyst for the Federal Aviation Administration (FAA). Using a dataset of nearly 2 million commercial flights from major U.S. airports, the goal was to analyze flight delays and cancellations to uncover patterns and actionable insights.
 
-Using Power BI, we transform the raw data into an interactive dashboard that allows stakeholders to explore delays and cancellations by:
+I built an interactive dashboard in Power BI that allows stakeholders to explore delays and cancellations by:
 
 Airport
 
@@ -11,53 +10,37 @@ Airline
 
 Day of the Week
 
-Delay Reasons
+Delay Reason
 
 🧩 Step 1: Data Loading & Transformation
-What I did:
-
+What I Did:
 Loaded the Flights, Airlines, and Airports datasets into Power BI.
 
 In the Flights table:
 
 Removed unnecessary columns.
 
-Retained:
+Retained key fields:
 
-AIRLINE
+AIRLINE, CANCELLATION_REASON, CANCELLED, DAY_OF_WEEK, DEPARTURE_DELAY, MONTH, ORIGIN_AIRPORT, YEAR
 
-CANCELLATION_REASON
-
-CANCELLED
-
-DAY_OF_WEEK
-
-DEPARTURE_DELAY
-
-MONTH
-
-ORIGIN_AIRPORT
-
-YEAR
-
-Added a conditional column Status:
+Created a new conditional column Status:
 
 "On Time" if DEPARTURE_DELAY <= 0
 
 "Delayed" if DEPARTURE_DELAY > 0
 
-For Airlines and Airports tables:
+For the Airlines and Airports tables:
 
-Promoted the first row to headers after loading.
+Promoted the first row to headers.
 
-Verified column names and data types were correct.
+Verified and cleaned column names and data types.
 
 🧱 Step 2: Data Modeling
-What I did:
+What I Did:
+Built a Star Schema with the Flights table as the central fact table.
 
-Built a star schema with the Flights table at the center as the fact table.
-
-Connected supporting dimension tables:
+Created and connected the following dimension tables:
 
 Airlines — joined on AIRLINE code.
 
@@ -65,11 +48,10 @@ Airports — joined on ORIGIN_AIRPORT code.
 
 Cancellation Codes — joined on CANCELLATION_REASON.
 
-Tables created:
-
+Tables Created:
 Fact Table: Flights
 
-Dimensions:
+Dimension Tables:
 
 Airlines
 
@@ -77,23 +59,38 @@ Airports
 
 Cancellation Codes
 
-Relationships defined:
+Relationships:
+Defined one-to-many relationships from each dimension to the fact table.
 
-One-to-many relationships from dimension tables to Flights table.
+Ensured correct cardinality and referential integrity.
 
-Verified correct cardinality and ensured referential integrity.
+📐 DAX Measures
+Created the following DAX measures to support dashboard interactivity and insights:
 
-Model structure (e.g., star schema?):
+DAX
+Copy
+Edit
+Total Flights = COUNTROWS(Flights)
 
-✅ Star Schema
+On Time Flights = CALCULATE([Total Flights], Flights[Status] = "On Time")
 
-Central fact table: Flights
+Delayed Flights = CALCULATE([Total Flights], Flights[Status] = "Delayed")
 
-Surrounding dimension tables: Airlines, Airports, Cancellation Reasons
+Canceled Flights = CALCULATE([Total Flights], Flights[Cancelled] = 1)
 
-dax measures 
-we created a measure called total flights Total Flights = COUNTROWS(Flights) in the flights table
-we also created calculated measures for On Time Flights = CALCULATE([Total Flights],flights[Status]="On Time") 
-On time flights delayed flights and canceled flights 
-And we made dax measures for the above 3 measures but in %
-% On Time = DIVIDE([On Time Flights],[Total Flights],"-")
+% On Time = DIVIDE([On Time Flights], [Total Flights], "-")
+
+% Delayed = DIVIDE([Delayed Flights], [Total Flights], "-")
+
+% Canceled = DIVIDE([Canceled Flights], [Total Flights], "-")
+🔍 Key Insights
+Atlanta (ATL) had the highest number of delays.
+
+Spirit Airlines was the least reliable airline, with the highest rate of delays and cancellations.
+
+Over 75% of cancellations were due to weather-related issues, primarily occurring on Tuesdays and Wednesdays.
+
+Minneapolis (MSP) recorded the lowest number of cancellations.
+
+SkyWest Airlines emerged as the most reliable airline in the dataset.
+
