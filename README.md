@@ -83,6 +83,8 @@ Canceled Flights = CALCULATE([Total Flights], Flights[Cancelled] = 1)
 % Delayed = DIVIDE([Delayed Flights], [Total Flights], "-")
 
 % Canceled = DIVIDE([Canceled Flights], [Total Flights], "-")
+
+
 🔍 Key Insights
 Atlanta (ATL) had the highest number of delays.
 
